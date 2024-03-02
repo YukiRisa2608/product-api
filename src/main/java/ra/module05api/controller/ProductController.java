@@ -5,51 +5,55 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ra.module05api.dto.DataResponseSuccess;
 import ra.module05api.dto.PageDto;
-import ra.module05api.entity.Product;
+import ra.module05api.dto.ProductDto;
 import ra.module05api.exception.ResourceNotFoundException;
-import ra.module05api.service.IProductService;
+import ra.module05api.service.ProductService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 public class ProductController {
-    private final IProductService productService;
+    private final ProductService productService;
 
-    // API lấy về danh sách tất cả sản phẩm với phân trang
+    //get all
     @GetMapping
-    public ResponseEntity<PageDto> findAllProducts(Pageable pageable) {
-        return new ResponseEntity<>(productService.findAllWithPagination(pageable), HttpStatus.OK);
+    public ResponseEntity<?> getAllProducts() {
+        return ResponseEntity.ok(new DataResponseSuccess(productService.findAll(), HttpStatus.OK));
     }
 
-    // Tìm kiếm sản phẩm theo ID
+    // get all with page
+    @GetMapping("/pagination")
+    public ResponseEntity<?> getAllProductsWithPagination(Pageable pageable) {
+        return ResponseEntity.ok(new DataResponseSuccess(productService.findAll(pageable), HttpStatus.OK));
+    }
+
+    // Tìm sản phẩm theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(productService.findById(id));
+    public ResponseEntity<ProductDto> findProductById(@PathVariable Long id) throws ResourceNotFoundException {
+        ProductDto product = productService.findById(id);
+        return ResponseEntity.ok(product);
     }
 
     // Xóa sản phẩm theo ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
         productService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    // Thêm mới sản phẩm
     @PostMapping
-    public ResponseEntity<Product> createNewProduct(@RequestBody Product product) {
-        Product createdProduct = productService.save(product);
-        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+        ProductDto newProduct = productService.addProduct(productDto);
+        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
-    // Cập nhật thông tin sản phẩm theo ID
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable Long id) throws ResourceNotFoundException {
-        Product existingProduct = productService.findById(id);
-        // Cập nhật thông tin sản phẩm dựa trên thông tin gửi lên từ client
-        // Ví dụ: existingProduct.setName(product.getName());
-        // Tiếp tục cập nhật các trường khác tương tự...
-        Product updatedProduct = productService.save(existingProduct);
-        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+        productDto.setProductId(id);
+        ProductDto updatedProduct = productService.editProduct(productDto);
+        return ResponseEntity.ok(updatedProduct);
     }
 }

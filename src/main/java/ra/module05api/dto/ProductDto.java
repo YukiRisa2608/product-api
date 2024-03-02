@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -29,6 +31,17 @@ public class ProductDto {
     @Min(1)
     private Integer quantity;
 
+    @NotBlank
+    private String classification;
+
+    private Boolean status;
+
+    private String imgUrl;
+
     private MultipartFile file;
+    
+    private LocalDateTime lastUpdated;
+    
+    private LocalDateTime createdDate;
 
 }

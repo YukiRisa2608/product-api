@@ -21,10 +21,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
     @NotBlank
     @Size(min = 3)
     private String productName;
@@ -38,12 +34,12 @@ public class Product {
     @Min(1)
     private Integer quantity;
 
-    //@NotBlank
+    //Phân loại sản phẩm
     private String classification;
 
-    private Boolean status = true;
-
     private String imgUrl;
+
+    private Boolean status = true;
 
     @UpdateTimestamp
     @Temporal(TIMESTAMP)
@@ -52,5 +48,9 @@ public class Product {
     @CreationTimestamp
     @Temporal(TIMESTAMP)
     private LocalDateTime createdDate;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
 
