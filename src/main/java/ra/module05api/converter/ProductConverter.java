@@ -35,6 +35,8 @@ public class ProductConverter {
         if (productDto.getFile() != null && !productDto.getFile().isEmpty()) {
             String imgUrl = uploadService.uploadFileToServer(productDto.getFile());
             product.setImgUrl(imgUrl);
+        } else {
+            product.setImgUrl(productDto.getImgUrl());
         }
         return product;
     }
@@ -57,6 +59,8 @@ public class ProductConverter {
         if (productDto.getFile() != null && !productDto.getFile().isEmpty()) {
             String newImgUrl = uploadService.uploadFileToServer(productDto.getFile());
             editProduct.setImgUrl(newImgUrl);
+        } else {
+            editProduct.setImgUrl(productDto.getImgUrl());
         }
         return editProduct;
     }
@@ -76,7 +80,8 @@ public class ProductConverter {
         productDto.setClassification(product.getClassification());
         productDto.setStatus(product.getStatus());
         productDto.setImgUrl(product.getImgUrl());
-
+        productDto.setCreatedDate(product.getCreatedDate());
+        productDto.setLastUpdated(product.getLastUpdated());
         return productDto;
     }
 }

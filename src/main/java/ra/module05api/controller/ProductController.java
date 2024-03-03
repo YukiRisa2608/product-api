@@ -3,6 +3,7 @@ package ra.module05api.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ra.module05api.dto.DataResponseSuccess;
@@ -44,7 +45,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         ProductDto newProduct = productService.addProduct(productDto);
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
