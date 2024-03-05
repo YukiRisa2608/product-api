@@ -27,6 +27,7 @@ public class ProductConverter {
         product.setDescription(productDto.getDescription());
         product.setQuantity(productDto.getQuantity());
         product.setClassification(productDto.getClassification());
+        product.setStatus(true);
         //Category
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found with id: " + productDto.getCategoryId()));
@@ -73,6 +74,7 @@ public class ProductConverter {
         if (product.getCategory() != null) {
             productDto.setCategoryId(product.getCategory().getId());
         }
+        productDto.setProductId(product.getId());
         productDto.setProductName(product.getProductName());
         productDto.setPrice(product.getPrice());
         productDto.setDescription(product.getDescription());

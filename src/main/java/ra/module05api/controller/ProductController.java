@@ -57,4 +57,9 @@ public class ProductController {
         ProductDto updatedProduct = productService.editProduct(productDto);
         return ResponseEntity.ok(updatedProduct);
     }
+
+    @PostMapping("/toggle-status/{id}")
+    public ResponseEntity<?> toggleStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.toggleStatus(id));
+    }
 }

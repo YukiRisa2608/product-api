@@ -1,6 +1,7 @@
 package ra.module05api.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import ra.module05api.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -87,4 +89,15 @@ public class ProductService {
         return productConverter.entityToDto(productRepository.save(updatedProduct));
     }
 
+    // Method thay ddooir trang thai product
+    @SneakyThrows
+    public String toggleStatus(Long id) {
+        // Find product by id
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        product.setStatus(!product.getStatus());
+
+        productRepository.save(product);
+
+        return "Oke";
+    }
 }

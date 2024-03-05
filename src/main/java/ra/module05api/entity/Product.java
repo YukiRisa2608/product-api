@@ -37,6 +37,7 @@ public class Product {
     //Phân loại sản phẩm
     private String classification;
 
+    @Column(columnDefinition="TEXT")
     private String imgUrl;
 
     private Boolean status = true;
