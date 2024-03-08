@@ -38,19 +38,21 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    // Xóa sản phẩm theo ID
+    // Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
         productService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    //Add
     @PostMapping()
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         ProductDto newProduct = productService.addProduct(productDto);
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
+    //Edit
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
         productDto.setProductId(id);
@@ -58,6 +60,7 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+    //Toggle
     @PostMapping("/toggle-status/{id}")
     public ResponseEntity<?> toggleStatus(@PathVariable Long id) {
         return ResponseEntity.ok(productService.toggleStatus(id));

@@ -1,11 +1,13 @@
 package ra.module05api.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ra.module05api.dto.CategoryDto;
 import ra.module05api.entity.Category;
+import ra.module05api.entity.Product;
 import ra.module05api.exception.ResourceNotFoundException;
 import ra.module05api.repository.CategoryRepository;
 import ra.module05api.converter.CategoryConverter;
@@ -37,6 +39,7 @@ public class CategoryService implements ICategoryService{
         return categoryConverter.entityToDto(category);
     }
 
+    //add
     @Override
     public CategoryDto save(CategoryDto categoryDto) {
         // Chuyển đổi từ CategoryDto sang entity Category
@@ -47,10 +50,23 @@ public class CategoryService implements ICategoryService{
         return categoryConverter.entityToDto(savedCategory);
     }
 
+    //delete
     public void delete(Long id) throws ResourceNotFoundException {
         if (!categoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Category not found");
         }
         categoryRepository.deleteById(id);
+    }
+
+    // toggle
+    @SneakyThrows
+    public String toggleStatus(Long id) {
+        // Find product by id
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        category.setStatus(!category.getStatus());
+
+        categoryRepository.save(category);
+
+        return "Oke";
     }
 }

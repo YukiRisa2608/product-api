@@ -18,5 +18,7 @@ public interface ICategoryService {
     CategoryDto save(CategoryDto categoryDto);
 
     void delete(Long id) throws ResourceNotFoundException;
+
+    Object toggleStatus(Long id);
 }
 

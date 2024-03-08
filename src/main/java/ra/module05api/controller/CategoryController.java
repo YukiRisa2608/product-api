@@ -66,4 +66,10 @@ public class CategoryController {
             CategoryDto updatedCategory = categoryService.save(categoryDto);
             return ResponseEntity.ok(new DataResponseSuccess(updatedCategory, HttpStatus.OK));
     }
+
+    //Toggle
+    @PostMapping("/toggle-status/{id}")
+    public ResponseEntity<?> toggleStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.toggleStatus(id));
+    }
 }
