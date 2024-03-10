@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // phi trạng thai
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers("/api.com/v2/auth/**").permitAll()
-                                .requestMatchers("/api.com/v5/admin/**").hasAuthority("ROLE_ADMIN")
+//                                .requestMatchers("/api.com/v5/admin/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers("/api.com/v2/admin/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers("/api.com/v2/user/**").hasAuthority("ROLE_USER")
                                 .requestMatchers("/api.com/v2/mod/**").hasAuthority("ROLE_MOD")
@@ -71,7 +71,6 @@ public class SecurityConfig {
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
 }

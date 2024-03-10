@@ -12,7 +12,7 @@ import ra.module05api.exception.ResourceNotFoundException;
 import ra.module05api.service.ICategoryService;
 
 @RestController
-@RequestMapping("/api/v1/categories")
+@RequestMapping("/api.com/v2/admin/categories")
 @CrossOrigin(origins = "*") // Cho phép tất cả origins
 @RequiredArgsConstructor
 public class CategoryController {

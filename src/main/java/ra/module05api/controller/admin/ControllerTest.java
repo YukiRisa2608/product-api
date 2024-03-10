@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api.com/v2")
+@RequestMapping("/api.com/v2/admin")
 public class ControllerTest {
     @GetMapping("/auth/v1")
     public ResponseEntity<?> publicAll(){

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +24,6 @@ import ra.module05api.repository.UserRepository;
 import ra.module05api.security.jwt.JwtProvider;
 import com.google.api.Authentication;
 
-import javax.naming.AuthenticationException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -54,10 +54,10 @@ public class AuthenticationService {
     };
     public SignInDtoResponse signIn(SignInRequest signInRequest) throws UsernameOrPasswordException {
         // xác thực thông qua username và password
-        Authentication authentication = null;
+        org.springframework.security.core.Authentication authentication = null;
         try {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword()));
-        }catch (AuthenticationException e){
+        } catch (AuthenticationException e){
             log.error("username or pass incorrect : ",e.getMessage());
             throw new UsernameOrPasswordException("username hoặc mật khẩu khong chính xác");
         }

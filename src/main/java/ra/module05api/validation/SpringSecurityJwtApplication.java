@@ -16,7 +16,7 @@ import java.io.InputStream;
 public class SpringSecurityJwtApplication {
     @Bean
     public Storage storage() throws IOException {
-        InputStream inputStream = new ClassPathResource("firebase-config.json").getInputStream();
+        InputStream inputStream = new ClassPathResource("firebase-admin-sdk.json").getInputStream();
 //        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("firebase-config.json");
         return StorageOptions.newBuilder()
                 .setCredentials(GoogleCredentials.fromStream(inputStream))

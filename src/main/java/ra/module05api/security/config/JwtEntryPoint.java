@@ -1,6 +1,7 @@
 package ra.module05api.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +15,9 @@ import java.util.Map;
 
 @Slf4j
 public class JwtEntryPoint implements AuthenticationEntryPoint {
+
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.AuthenticationException authException) throws IOException, ServletException {
         log.error("authentication fail cause :",authException.getMessage());
         response.setHeader("error","authorize");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
