@@ -1,4 +1,4 @@
-package ra.module05api.controller;
+package ra.module05api.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

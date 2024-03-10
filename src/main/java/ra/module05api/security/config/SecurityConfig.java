@@ -61,6 +61,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // phi trạng thai
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers("/api.com/v2/auth/**").permitAll()
+                                .requestMatchers("/api.com/v2/generic/**").permitAll()
 //                                .requestMatchers("/api.com/v5/admin/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers("/api.com/v2/admin/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers("/api.com/v2/user/**").hasAuthority("ROLE_USER")

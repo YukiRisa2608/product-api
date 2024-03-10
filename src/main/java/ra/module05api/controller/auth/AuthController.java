@@ -1,4 +1,4 @@
-package ra.module05api.controller.admin;
+package ra.module05api.controller.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
