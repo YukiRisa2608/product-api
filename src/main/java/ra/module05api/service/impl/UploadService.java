@@ -1,4 +1,4 @@
-package ra.module05api.service;
+package ra.module05api.service.impl;
 
 import com.google.cloud.storage.*;
 import jakarta.servlet.ServletContext;

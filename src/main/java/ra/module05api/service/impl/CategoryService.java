@@ -1,4 +1,4 @@
-package ra.module05api.service;
+package ra.module05api.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -11,13 +11,14 @@ import ra.module05api.entity.Product;
 import ra.module05api.exception.ResourceNotFoundException;
 import ra.module05api.repository.CategoryRepository;
 import ra.module05api.converter.CategoryConverter;
+import ra.module05api.service.ICategoryService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements ICategoryService{
+public class CategoryService implements ICategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryConverter categoryConverter;
 

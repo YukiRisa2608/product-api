@@ -1,4 +1,4 @@
-package ra.module05api.service;
+package ra.module05api.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -16,7 +16,6 @@ import ra.module05api.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,23 +35,26 @@ public class ProductService {
     }
 
     //Find all with page
-    public PageDto findAll(Pageable pageable) {
-        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), 5, pageable.getSort());
-        Page<Product> page = productRepository.findAll(customPageable);
+    public PageDto findAllActiveProductsWithPagination(int page) {
+        if (page <= 0) {
+            page = 1;
+        }
+        Pageable customPageable = PageRequest.of(page-1, 5);
+        Page<Product> pageData = productRepository.findAll(customPageable);
         List<ProductDto> dtos = new ArrayList<>();
-        for (Product product : page.getContent()) {
+        for (Product product : pageData.getContent()) {
             dtos.add(productConverter.entityToDto(product));
         }
 
         return PageDto.builder()
                 .data(dtos)
-                .pages(page.getTotalPages())
-                .hasNext(page.hasNext())
-                .hasPrev(page.hasPrevious())
-                .size(page.getSize())
-                .number(page.getNumber())
-                .totalElements(page.getTotalElements())
-                .sort(page.getSort())
+                .pages(pageData.getTotalPages())
+                .hasNext(pageData.hasNext())
+                .hasPrev(pageData.hasPrevious())
+                .size(pageData.getSize())
+                .number(pageData.getNumber())
+                .totalElements(pageData.getTotalElements())
+                .sort(pageData.getSort())
                 .build();
     }
 

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ra.module05api.dto.CategoryDto;
 import ra.module05api.dto.DataResponseSuccess;
-import ra.module05api.dto.NotFoundResponse;
+import ra.module05api.dto.DataResponseError;
 import ra.module05api.exception.ResourceNotFoundException;
 import ra.module05api.service.ICategoryService;
 
@@ -37,7 +37,7 @@ public class CategoryController {
             CategoryDto categoryDto = categoryService.findById(id);
             return ResponseEntity.ok(new DataResponseSuccess(categoryDto, HttpStatus.OK));
         } catch (ResourceNotFoundException ex) {
-            return ResponseEntity.badRequest().body(new NotFoundResponse(ex.getMessage(), HttpStatus.BAD_REQUEST));
+            return ResponseEntity.badRequest().body(new DataResponseError(ex.getMessage(), HttpStatus.BAD_REQUEST));
         }
     }
 
@@ -48,7 +48,7 @@ public class CategoryController {
             categoryService.delete(id);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
-            return ResponseEntity.badRequest().body(new NotFoundResponse(ex.getMessage(), HttpStatus.BAD_REQUEST));
+            return ResponseEntity.badRequest().body(new DataResponseError(ex.getMessage(), HttpStatus.BAD_REQUEST));
         }
     }
 

@@ -6,9 +6,7 @@ import ra.module05api.dto.ProductDto;
 import ra.module05api.entity.Category;
 import ra.module05api.entity.Product;
 import ra.module05api.repository.CategoryRepository;
-import ra.module05api.service.UploadService;
-
-import java.io.IOException;
+import ra.module05api.service.impl.UploadService;
 
 @Component
 public class ProductConverter {

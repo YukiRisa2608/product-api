@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class NotFoundResponse {
+public class DataResponseError {
     private String message;
     private HttpStatus statusError;
 
