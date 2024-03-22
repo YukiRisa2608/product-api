@@ -34,11 +34,11 @@ public class CartService implements ICartService {
     private final ObjectMapper objectMapper;
 
     private UserCartDto commonData() {
-         User user = SecurityUtil.getCurrentUser();
-         if (user == null) {
-             throw new UnAuthorizationException();
-         }
-         Cart cart = cartRepository.findByUser_Id(user.getId());
+        User user = SecurityUtil.getCurrentUser();
+        if (user == null) {
+            throw new UnAuthorizationException();
+        }
+        Cart cart = cartRepository.findByUser_Id(user.getId());
 
         // Check cart null
         if (cart == null) {
@@ -153,9 +153,8 @@ public class CartService implements ICartService {
         }
 
         // clear cart
-//        productCartRepository.deleteAllByCart_Id(cart.getId());
-        productCartRepository.deleteAll(listProductCart);
-        productCartRepository.flush();
+        productCartRepository.deleteByCartId(cart.getId());
+
         // Create object order
         Order order = new Order();
         order.setCreatedDate(Calendar.getInstance().getTime());
