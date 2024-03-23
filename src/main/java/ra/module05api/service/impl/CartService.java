@@ -167,4 +167,36 @@ public class CartService implements ICartService {
 
         return orderRepository.save(order);
     }
+
+    @Override
+    public String addToCart(Long productId) {
+        User user = SecurityUtil.getCurrentUser();
+        if (user == null) {
+            throw new UnAuthorizationException();
+        }
+
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product == null) {
+            throw new NotFoundException("Can not found product id = " + productId);
+        }
+
+        Cart cart = user.getCart();
+        if (cart == null) {
+            cart = cartRepository.save(new Cart(null, user, new ArrayList<>()));
+            user.setCart(cart);
+            userRepository.save(user);
+        }
+
+        ProductCart productCart = productCartRepository.findByCart_IdAndProduct_Id(cart.getId(), productId);
+        if (productCart == null) {
+            // Add new product to cart
+            productCart = productCartRepository.save(new ProductCart(null, product, cart, 1));
+        } else {
+            // Update quantity
+            productCart.setQuantity(productCart.getQuantity() + 1);
+            productCartRepository.save(productCart);
+        }
+
+        return "Success";
+    }
 }

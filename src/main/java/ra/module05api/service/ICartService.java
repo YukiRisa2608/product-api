@@ -22,4 +22,6 @@ public interface ICartService {
 
     // Purchase
     Order purchase() throws JsonProcessingException;
+
+    String addToCart(Long productId);
 }
