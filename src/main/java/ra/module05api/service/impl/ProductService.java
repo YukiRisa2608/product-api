@@ -39,7 +39,7 @@ public class ProductService {
         if (page <= 0) {
             page = 1;
         }
-        Pageable customPageable = PageRequest.of(page-1, 5);
+        Pageable customPageable = PageRequest.of(page-1, 4);
         Page<Product> pageData = productRepository.findAll(customPageable);
         List<ProductDto> dtos = new ArrayList<>();
         for (Product product : pageData.getContent()) {
