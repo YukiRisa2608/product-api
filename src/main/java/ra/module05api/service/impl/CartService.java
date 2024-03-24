@@ -50,12 +50,13 @@ public class CartService implements ICartService {
 
     @Override
     public List<ProductCart> getAllProductCart() {
-        // Fina user call api
+        // Find user call api
         UserCartDto object = commonData();
 
         return productCartRepository.findAllByCart_Id(object.getCart().getId());
     }
 
+    //+- quantity
     @Override
     public void updateProductQuantity(Long productId, Integer quantity) {
         UserCartDto object = commonData();
@@ -89,6 +90,7 @@ public class CartService implements ICartService {
         productCartRepository.save(productCart);
     }
 
+    //remove item in cart
     @Override
     public void deleteProduct(Long productId) {
         UserCartDto object = commonData();
@@ -111,6 +113,7 @@ public class CartService implements ICartService {
         productCartRepository.delete(productCart);
     }
 
+    //clear cart
     @Override
     public void clearCart() {
         UserCartDto object = commonData();
@@ -120,6 +123,7 @@ public class CartService implements ICartService {
         productCartRepository.deleteAllByCart_Id(cart.getId());
     }
 
+    //purchase
     @Override
     @SneakyThrows
     public Order purchase() {
@@ -137,7 +141,7 @@ public class CartService implements ICartService {
         for (ProductCart productCart: listProductCart) {
             Product product = productCart.getProduct();
             if (product.getQuantity() < productCart.getQuantity()) {
-                throw new InvalidException("Quantity khong du"); // note sua message
+                throw new InvalidException("Quantity khong du");
             }
             // Update quantity to DB
             product.setQuantity(product.getQuantity() - productCart.getQuantity());
@@ -148,7 +152,7 @@ public class CartService implements ICartService {
             tempProduct.setQuantity(productCart.getQuantity());
             listProduct.add(objectMapper.writeValueAsString(tempProduct));
 
-            // Calcalation money
+            // Calculation money
             money += product.getPrice() * productCart.getQuantity();
         }
 
@@ -168,6 +172,7 @@ public class CartService implements ICartService {
         return orderRepository.save(order);
     }
 
+    //add to cart
     @Override
     public String addToCart(Long productId) {
         User user = SecurityUtil.getCurrentUser();

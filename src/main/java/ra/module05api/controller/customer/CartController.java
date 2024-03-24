@@ -51,6 +51,7 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
+    //add to cart
     @PostMapping()
     public ResponseEntity<?> addToCart(@RequestParam("productId") Long productId) {
         return ResponseEntity.ok(cartService.addToCart(productId));

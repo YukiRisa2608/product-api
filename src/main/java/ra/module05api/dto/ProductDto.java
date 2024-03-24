@@ -31,7 +31,6 @@ public class ProductDto {
     @Min(1)
     private Integer quantity;
 
-    @NotBlank
     private String classification;
 
     private Boolean status;

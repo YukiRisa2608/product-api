@@ -58,8 +58,6 @@ public class ProductConverter {
         if (productDto.getFile() != null && !productDto.getFile().isEmpty()) {
             String newImgUrl = uploadService.uploadFileToServer(productDto.getFile());
             editProduct.setImgUrl(newImgUrl);
-        } else {
-            editProduct.setImgUrl(productDto.getImgUrl());
         }
         return editProduct;
     }
