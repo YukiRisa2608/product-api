@@ -22,6 +22,7 @@ public class Cart {
     private Long id;
 
     @OneToOne(mappedBy = "cart")
+    @JsonIgnore
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "cart")

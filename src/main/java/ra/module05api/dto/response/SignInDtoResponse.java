@@ -12,6 +12,7 @@ import java.util.List;
 public class SignInDtoResponse {
     private Long id;
     private String fullName;
+    private String username;
     private String email;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private Date birthDay;

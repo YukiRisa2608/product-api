@@ -91,7 +91,7 @@ public class ProductService {
         return productConverter.entityToDto(productRepository.save(updatedProduct));
     }
 
-    // Method thay ddooir trang thai product
+    // toggle status
     @SneakyThrows
     public String toggleStatus(Long id) {
         // Find product by id

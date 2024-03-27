@@ -75,6 +75,7 @@ public class AuthenticationService {
                 .fullName(user.getFullName())
                 .accessToken(accessToken)
                 .birthDay(user.getBirthDay())
+                .username(user.getUsername())
                 .role(roles).build();
 
     };

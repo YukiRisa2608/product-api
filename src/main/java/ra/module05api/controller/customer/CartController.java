@@ -47,8 +47,7 @@ public class CartController {
     //purchase
     @PostMapping("/purchase")
     public ResponseEntity<?> purchase() {
-        cartService.purchase();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(cartService.purchase());
     }
 
     //add to cart
