@@ -1,11 +1,13 @@
 package ra.module05api.service.impl;
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import ra.module05api.dto.UserDto;
 import ra.module05api.entity.Role;
 import ra.module05api.entity.User;
 import ra.module05api.exception.InvalidException;
 import ra.module05api.exception.NotFoundException;
+import ra.module05api.exception.ResourceNotFoundException;
 import ra.module05api.repository.RoleRepository;
 import ra.module05api.repository.UserRepository;
 import ra.module05api.service.IUserService;
@@ -23,11 +25,13 @@ public class UserService implements IUserService {
         this.roleRepository = roleRepository;
     }
 
+    //get list
     @Override
     public List<User> getListUser() {
         return userRepository.findAll();
     }
 
+    //get by id
     @Override
     public User getUserById(Long id) {
         User user = userRepository.findById(id).orElse(null);
@@ -38,6 +42,7 @@ public class UserService implements IUserService {
         return user;
     }
 
+    //add new user
     @Override
     public User createNewUser(UserDto userDto) {
         User user = userRepository.findByEmailOrUsername(userDto.getEmail(), userDto.getUsername());
@@ -62,13 +67,13 @@ public class UserService implements IUserService {
         return userRepository.save(user);
     }
 
-    @Override
-    public User updateUserById(Long id, UserDto userDto) {
-        return null;
-    }
+//toggle
+    @SneakyThrows
+    public Object toggleStatus(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setStatus(!user.isStatus());
+        userRepository.save(user);
 
-    @Override
-    public User deleteUserById(Long id) {
-        return null;
+        return "Oke";
     }
 }

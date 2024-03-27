@@ -37,6 +37,8 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final ModelMapper mapper;
     private final UserRepository userRepository;
+
+    //Sign up
     public void signUp(SignUpRequest signUpRequest) throws DataFieldExistException {
         if (userRepository.existsByUsername(signUpRequest.getUsername())){
             throw new DataFieldExistException("username is exist");
@@ -47,11 +49,13 @@ public class AuthenticationService {
         User user = mapper.map(signUpRequest, User.class); // chuyển dổi
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword())); // mã hóa mật khâu
         user.setStatus(true);
-        Role roleUser = roleRepository.findByRoleName(RoleName.ROLE_USER).orElseThrow(() -> new RuntimeException("Role not exisst"));
+        Role roleUser = roleRepository.findByRoleName(RoleName.ROLE_USER).orElseThrow(() -> new RuntimeException("Role not exist"));
         user.setRoleSet(new HashSet<>());
         user.getRoleSet().add(roleUser);
         userRepository.save(user);
     };
+
+    //Sign in
     public SignInDtoResponse signIn(SignInRequest signInRequest) throws UsernameOrPasswordException {
         // xác thực thông qua username và password
         org.springframework.security.core.Authentication authentication = null;
