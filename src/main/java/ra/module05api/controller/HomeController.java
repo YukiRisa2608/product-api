@@ -1,11 +1,13 @@
 package ra.module05api.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ra.module05api.dto.PageDto;
+import ra.module05api.dto.ProductDto;
 import ra.module05api.dto.request.SignInRequest;
 import ra.module05api.dto.request.SignUpRequest;
 import ra.module05api.dto.response.ResponseDtoSuccess;
@@ -22,9 +24,27 @@ import ra.module05api.service.impl.ProductService;
 public class HomeController {
     private final ProductService productService;
 
+    //get all
     @GetMapping
     public ResponseEntity<PageDto> getAllActiveProducts(@RequestParam("page") int page) {
         PageDto products = productService.findAllActiveProductsWithPagination(page);
         return ResponseEntity.ok(products);
     }
+
+    //sort
+//    @GetMapping("/sort")
+//    public ResponseEntity<Page<ProductDto>> getSortedProducts(@RequestParam("page") int page,
+//                                                              @RequestParam("size") int size,
+//                                                              @RequestParam("sort") String sortDirection) {
+//        Page<ProductDto> products = productService.findSortedActiveProducts(page, size, sortDirection);
+//        return ResponseEntity.ok(products);
+//    }
+    @GetMapping("/sort")
+    public ResponseEntity<PageDto> getSortedProducts(@RequestParam("page") int page,
+                                                     @RequestParam("size") int size,
+                                                     @RequestParam("sort") String sortDirection) {
+        PageDto products = productService.findSortedActiveProducts(page, size, sortDirection);
+        return ResponseEntity.ok(products);
+    }
+
 }

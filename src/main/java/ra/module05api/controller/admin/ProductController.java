@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ra.module05api.dto.DataResponseSuccess;
 import ra.module05api.dto.ProductDto;
+import ra.module05api.dto.request.SearchProductPayload;
 import ra.module05api.exception.ResourceNotFoundException;
 import ra.module05api.service.impl.ProductService;
 
@@ -28,7 +29,7 @@ public class ProductController {
     public ResponseEntity<?> findAllActiveProductsWithPagination(@RequestParam("page") int page) {
         return ResponseEntity.ok(
                 new DataResponseSuccess(productService.findAllActiveProductsWithPagination(page),
-                HttpStatus.OK)
+                        HttpStatus.OK)
         );
     }
 
@@ -66,4 +67,10 @@ public class ProductController {
     public ResponseEntity<?> toggleStatus(@PathVariable Long id) {
         return ResponseEntity.ok(productService.toggleStatus(id));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(SearchProductPayload payload) {
+        return ResponseEntity.ok(productService.search(payload));
+    }
+
 }

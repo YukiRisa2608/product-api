@@ -56,7 +56,6 @@ public class UserService implements IUserService {
         }
 
         user = User.builder()
-                .fullName(userDto.getFullName().trim())
                 .username(userDto.getUsername().trim())
                 .password(userDto.getPassword().trim())
                 .email(userDto.getEmail().trim())
