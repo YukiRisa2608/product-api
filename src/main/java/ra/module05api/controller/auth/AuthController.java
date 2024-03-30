@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ra.module05api.controller.base.VsResponseUtil;
 import ra.module05api.dto.request.SignInRequest;
 import ra.module05api.dto.request.SignUpRequest;
 import ra.module05api.dto.response.ResponseDtoSuccess;
@@ -20,7 +21,7 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest) throws UsernameOrPasswordException {
         SignInDtoResponse data = authenticationService.signIn(signInRequest);
-        return new ResponseEntity<>(new ResponseDtoSuccess(data,HttpStatus.OK),HttpStatus.OK);
+        return VsResponseUtil.ok(data);
     }
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) throws DataFieldExistException {

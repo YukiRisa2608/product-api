@@ -14,7 +14,9 @@ import ra.module05api.converter.ProductConverter;
 import ra.module05api.dto.PageDto;
 import ra.module05api.dto.ProductDto;
 import ra.module05api.dto.request.SearchProductPayload;
+import ra.module05api.entity.Category;
 import ra.module05api.entity.Product;
+import ra.module05api.exception.InvalidException;
 import ra.module05api.exception.ResourceNotFoundException;
 import ra.module05api.repository.ProductRepository;
 import ra.module05api.service.IProductService;
@@ -79,6 +81,10 @@ public class ProductService {
     public ProductDto addProduct(ProductDto productDto) {
         //dto to entity
         Product product = productConverter.addProductConvertDtoToEntity(productDto);
+
+        // validate product name
+        validateProductName(product);
+
         Product savedProduct = productRepository.save(product);
         //entity to dto
         return productConverter.entityToDto(savedProduct);
@@ -93,6 +99,10 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + productDto.getProductId()));
         //dto to entity
         Product updatedProduct = productConverter.updateProductFromDto(productDto, editProduct);
+
+        // validate product name
+        validateProductName(updatedProduct);
+
         // Chuyển đổi và trả về ProductDto
         return productConverter.entityToDto(productRepository.save(updatedProduct));
     }
@@ -109,24 +119,17 @@ public class ProductService {
         return "Oke";
     }
 
-    //sort
-//    public Page<ProductDto> findSortedActiveProducts(int page, int size, String sortDirection) {
-//        Sort sort = Sort.by("price");
-//        sort = sortDirection.equalsIgnoreCase("desc") ? sort.descending() : sort.ascending();
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//
-//        Page<Product> products = productRepository.findByStatusTrue(pageable);
-//        return products.map(product -> modelMapper.map(product, ProductDto.class));
-//    }
+
     public PageDto findSortedActiveProducts(int page, int size, String sortDirection) {
         Sort sort = Sort.by("price");
         sort = sortDirection.equalsIgnoreCase("desc") ? sort.descending() : sort.ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Product> products = productRepository.findByStatusTrue(pageable);
+        Page<Product> products = productRepository.findByStatusIsTrue(pageable);
         return PageConverter.convertPageToPageDto(products, ProductDto.class);
     }
 
+    //search
     public PageDto search(SearchProductPayload payload) {
         List<Product> listProduct = new ArrayList<>();
         // Default sort by id
@@ -143,32 +146,41 @@ public class ProductService {
         Page<Product> products;
         // Neu truyen category id va keyword
         if (payload.getCategoryId() != null && !payload.getKeyword().isEmpty()) {
-            products= productRepository.findAllByCategory_IdAndProductNameContainingIgnoreCase(
+            products= productRepository.findAllByStatusIsTrueAndCategory_IdAndProductNameContainingIgnoreCase(
                     pageable, payload.getCategoryId(), payload.getKeyword()
             );
         } else if (payload.getCategoryId() != null) {
             // Neu truyen category va khong truyen keyword
-            products= productRepository.findAllByCategory_Id(
+            products= productRepository.findAllByStatusIsTrueAndCategory_Id(
                     pageable, payload.getCategoryId()
             );
         } else if (!payload.getKeyword().isEmpty()) {
             // Neu khong truyen category va truyen keyword
-            products= productRepository.findAllByProductNameContainingIgnoreCase(
+            products= productRepository.findAllByStatusIsTrueAndProductNameContainingIgnoreCase(
                     pageable, payload.getKeyword()
             );
         } else {
             // khong truyen category va khong truyen keyword
-            products= productRepository.findAll(pageable);
+            products= productRepository.findByStatusIsTrue(pageable);
         }
 
         return PageConverter.convertPageToPageDto(products, ProductDto.class);
     }
 
-    //search
-
-
-
-    //filter by category
+    private void validateProductName(Product product) {
+        Product productByName = productRepository.findByProductName(product.getProductName());
+        if (product.getId() == null) {
+            // Case create
+            if (productByName != null) {
+                throw new InvalidException("Product name is duplicate");
+            }
+            return;
+        }
+        // case update
+        if (productByName!= null && !productByName.getId().equals(product.getId())) {
+            throw new InvalidException("Product name is duplicate");
+        }
+    }
 
 
 }

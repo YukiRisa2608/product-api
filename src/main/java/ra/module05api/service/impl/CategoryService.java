@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ra.module05api.dto.CategoryDto;
 import ra.module05api.entity.Category;
 import ra.module05api.entity.Product;
+import ra.module05api.exception.InvalidException;
 import ra.module05api.exception.ResourceNotFoundException;
 import ra.module05api.repository.CategoryRepository;
 import ra.module05api.converter.CategoryConverter;
@@ -24,6 +25,13 @@ public class CategoryService implements ICategoryService {
 
     public List<CategoryDto> findAll() {
         List<Category> categories = categoryRepository.findAll();
+        // Sử dụng CategoryConverter để chuyển đổi sang CategoryDto
+        return categories.stream().map(categoryConverter::entityToDto).collect(Collectors.toList());
+    }
+
+
+    public List<CategoryDto> findAllWithStatusIsTrue() {
+        List<Category> categories = categoryRepository.findAllByStatusIsTrue();
         // Sử dụng CategoryConverter để chuyển đổi sang CategoryDto
         return categories.stream().map(categoryConverter::entityToDto).collect(Collectors.toList());
     }
@@ -45,10 +53,29 @@ public class CategoryService implements ICategoryService {
     public CategoryDto save(CategoryDto categoryDto) {
         // Chuyển đổi từ CategoryDto sang entity Category
         Category category = categoryConverter.dtoToEntity(categoryDto);
+
+        // Validate name
+        validateCategoryName(categoryDto.getId(), category);
+
         // Lưu entity Category vào cơ sở dữ liệu
         Category savedCategory = categoryRepository.save(category);
         // Chuyển đổi entity Category lưu được sang CategoryDto và trả về
         return categoryConverter.entityToDto(savedCategory);
+    }
+
+    private void validateCategoryName(Long id, Category category) {
+        Category categoryByName = categoryRepository.findByCategoryName(category.getCategoryName());
+        if (id == null) {
+            // Case create
+            if (categoryByName != null) {
+                throw new InvalidException("Category name is duplicate");
+            }
+            return;
+        }
+        // case update
+        if (categoryByName != null && !categoryByName.getId().equals(id)) {
+            throw new InvalidException("Category name is duplicate");
+        }
     }
 
     //delete

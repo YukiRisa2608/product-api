@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ra.module05api.controller.base.VsResponseUtil;
 import ra.module05api.dto.DataResponseSuccess;
 import ra.module05api.dto.ProductDto;
 import ra.module05api.dto.request.SearchProductPayload;
@@ -21,56 +22,58 @@ public class ProductController {
     //get all
     @GetMapping
     public ResponseEntity<?> getAllProducts() {
-        return ResponseEntity.ok(new DataResponseSuccess(productService.findAll(), HttpStatus.OK));
+        Object data = productService.findAll();
+        return VsResponseUtil.ok(data);
     }
 
     // get all with page
-    @GetMapping("/pagination")
-    public ResponseEntity<?> findAllActiveProductsWithPagination(@RequestParam("page") int page) {
-        return ResponseEntity.ok(
-                new DataResponseSuccess(productService.findAllActiveProductsWithPagination(page),
-                        HttpStatus.OK)
-        );
-    }
+//    @GetMapping("/pagination")
+//    public ResponseEntity<?> findAllActiveProductsWithPagination(@RequestParam("page") int page) {
+//        return ResponseEntity.ok(
+//                new DataResponseSuccess(productService.findAllActiveProductsWithPagination(page),
+//                        HttpStatus.OK)
+//        );
+//    }
 
-    // Tìm sản phẩm theo ID
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> findProductById(@PathVariable Long id) throws ResourceNotFoundException {
-        ProductDto product = productService.findById(id);
-        return ResponseEntity.ok(product);
-    }
+//    // Tìm sản phẩm theo ID
+//    @GetMapping("/{id}")
+//    public ResponseEntity<ProductDto> findProductById(@PathVariable Long id) throws ResourceNotFoundException {
+//        ProductDto product = productService.findById(id);
+//        return ResponseEntity.ok(product);
+//    }
 
     // Delete
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteProductById(@PathVariable Long id) {
         productService.delete(id);
-        return ResponseEntity.noContent().build();
+        return VsResponseUtil.okMessage("Delete successfully");
     }
 
     //Add
     @PostMapping()
-    public ResponseEntity<ProductDto> createProduct(@ModelAttribute ProductDto productDto) {
+    public ResponseEntity<?> createProduct(@ModelAttribute ProductDto productDto) {
         ProductDto newProduct = productService.addProduct(productDto);
-        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
+        return VsResponseUtil.ok(newProduct);
     }
 
     //Edit
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @ModelAttribute ProductDto productDto) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @ModelAttribute ProductDto productDto) {
         productDto.setProductId(id);
         ProductDto updatedProduct = productService.editProduct(productDto);
-        return ResponseEntity.ok(updatedProduct);
+        return VsResponseUtil.ok(updatedProduct);
     }
 
     //Toggle
     @PostMapping("/toggle-status/{id}")
     public ResponseEntity<?> toggleStatus(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.toggleStatus(id));
+        return VsResponseUtil.ok(productService.toggleStatus(id));
     }
 
+    //search
     @GetMapping("/search")
     public ResponseEntity<?> search(SearchProductPayload payload) {
-        return ResponseEntity.ok(productService.search(payload));
+        return VsResponseUtil.ok(productService.search(payload));
     }
 
 }

@@ -4,31 +4,32 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+import ra.module05api.controller.base.VsResponseUtil;
 import ra.module05api.dto.DataResponseError;
 
 @RestControllerAdvice
 public class ExceptionHandlerConfig {
 
     @ExceptionHandler(value = {NotFoundException.class})
-    protected ResponseEntity<DataResponseError> handleNotFoundException(NotFoundException notFoundException) {
-        return ResponseEntity
-                .badRequest()
-                .body(new DataResponseError(notFoundException.getMessage(), HttpStatus.NOT_FOUND));
+    protected ResponseEntity<?> handleNotFoundException(NotFoundException notFoundException) {
+        return VsResponseUtil.error(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {InvalidException.class})
-    protected ResponseEntity<DataResponseError> handleInvalidException(InvalidException invalidException) {
-        return ResponseEntity
-                .badRequest()
-                .body(new DataResponseError(invalidException.getMessage(), HttpStatus.BAD_REQUEST));
+    protected ResponseEntity<?> handleInvalidException(InvalidException invalidException) {
+       return VsResponseUtil.error(invalidException.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 
     @ExceptionHandler(value = {UnAuthorizationException.class})
-    protected ResponseEntity<DataResponseError> handleUnAuthorizationException(UnAuthorizationException unAuthorizationException) {
-        return ResponseEntity
-                .badRequest()
-                .body(new DataResponseError(unAuthorizationException.getMessage(), HttpStatus.UNAUTHORIZED));
+    protected ResponseEntity<?> handleUnAuthorizationException(UnAuthorizationException unAuthorizationException) {
+        return VsResponseUtil.error(unAuthorizationException.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = {HttpClientErrorException.Forbidden.class})
+    protected ResponseEntity<?> handleException(Exception ex) {
+        return VsResponseUtil.error(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
 }

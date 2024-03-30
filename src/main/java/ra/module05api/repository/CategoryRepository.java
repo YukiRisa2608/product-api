@@ -7,4 +7,9 @@ import java.util.List;
 
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+
+    Category findByCategoryName(String name);
+
+    List<Category> findAllByStatusIsTrue();
+
 }

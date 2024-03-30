@@ -18,6 +18,7 @@ import ra.module05api.entity.Role;
 import ra.module05api.entity.RoleName;
 import ra.module05api.entity.User;
 import ra.module05api.exception.DataFieldExistException;
+import ra.module05api.exception.InvalidException;
 import ra.module05api.exception.UsernameOrPasswordException;
 import ra.module05api.repository.RoleRepository;
 import ra.module05api.repository.UserRepository;
@@ -59,14 +60,20 @@ public class AuthenticationService {
     public SignInDtoResponse signIn(SignInRequest signInRequest) throws UsernameOrPasswordException {
         // xác thực thông qua username và password
         org.springframework.security.core.Authentication authentication = null;
+
+        // xaác thực thành công
+        User user = userRepository.findByUsername(signInRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("not found"));
+        // Check block user
+        if (user != null && !user.isStatus()) {
+            throw new InvalidException("User is blocked");
+        }
+
         try {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword()));
         } catch (AuthenticationException e){
-            log.error("username or pass incorrect : ",e.getMessage());
-            throw new UsernameOrPasswordException("username hoặc mật khẩu khong chính xác");
+            throw new InvalidException("username hoặc mật khẩu khong chính xác");
         }
-        // xaác thực thành công
-        User user = userRepository.findByUsername(signInRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("not found"));
+
         // lấy ra userDetail
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // tao token
@@ -81,6 +88,5 @@ public class AuthenticationService {
                 .birthDay(user.getBirthDay())
                 .username(user.getUsername())
                 .role(roles).build();
-
     };
 }

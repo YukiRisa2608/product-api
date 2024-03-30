@@ -11,6 +11,8 @@ import java.util.List;
 public interface ICategoryService {
     List<CategoryDto> findAll();
 
+    List<CategoryDto> findAllWithStatusIsTrue();
+
     Page<CategoryDto> findAllWithPagination(Pageable pageable);
 
     CategoryDto findById(Long id) throws ResourceNotFoundException;

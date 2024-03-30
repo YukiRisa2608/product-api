@@ -10,13 +10,16 @@ import ra.module05api.entity.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.status = true")
     Page<Product> findAllActiveProductsWithPagination(Pageable pageable);
-    Page<Product> findByStatusTrue(Pageable pageable);
+    Page<Product> findByStatusIsTrue(Pageable pageable);
     Page<Product> findByCategoryIdAndStatusTrue(Long categoryId, Pageable pageable);
 
     //search
     Page<Product> findByStatusTrueAndProductNameContainingIgnoreCase(Pageable pageable, String keyword);
 
-    Page<Product> findAllByCategory_IdAndProductNameContainingIgnoreCase(Pageable pageable, Long categoryId, String keyword);
-    Page<Product> findAllByProductNameContainingIgnoreCase(Pageable pageable, String keyword);
-    Page<Product> findAllByCategory_Id(Pageable pageable, Long categoryId);
+    Page<Product> findAllByStatusIsTrueAndCategory_IdAndProductNameContainingIgnoreCase(Pageable pageable, Long categoryId, String keyword);
+    Page<Product> findAllByStatusIsTrueAndProductNameContainingIgnoreCase(Pageable pageable, String keyword);
+    Page<Product> findAllByStatusIsTrueAndCategory_Id(Pageable pageable, Long categoryId);
+
+    Product findByProductName(String productName);
+
 }
