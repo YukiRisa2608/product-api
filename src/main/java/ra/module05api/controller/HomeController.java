@@ -36,13 +36,13 @@ public class HomeController {
     }
 
     //sort
-    @GetMapping("/sort")
-    public ResponseEntity<PageDto> getSortedProducts(@RequestParam("page") int page,
-                                                     @RequestParam("size") int size,
-                                                     @RequestParam("sort") String sortDirection) {
-        PageDto products = productService.findSortedActiveProducts(page, size, sortDirection);
-        return ResponseEntity.ok(products);
-    }
+//    @GetMapping("/sort")
+//    public ResponseEntity<PageDto> getSortedProducts(@RequestParam("page") int page,
+//                                                     @RequestParam("size") int size,
+//                                                     @RequestParam("sort") String sortDirection) {
+//        PageDto products = productService.findSortedActiveProducts(page, size, sortDirection);
+//        return ResponseEntity.ok(products);
+//    }
 
 
     @GetMapping("/product/search")

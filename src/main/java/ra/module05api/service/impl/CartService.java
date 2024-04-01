@@ -175,16 +175,19 @@ public class CartService implements ICartService {
     //add to cart
     @Override
     public String addToCart(Long productId) {
+        //check login
         User user = SecurityUtil.getCurrentUser();
         if (user == null) {
             throw new UnAuthorizationException();
         }
 
+        //tìm sp
         Product product = productRepository.findById(productId).orElse(null);
         if (product == null) {
             throw new NotFoundException("Can not found product id = " + productId);
         }
 
+        //lấy giỏ hàng của user
         Cart cart = user.getCart();
         if (cart == null) {
             cart = cartRepository.save(new Cart(null, user, new ArrayList<>()));
