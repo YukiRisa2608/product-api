@@ -74,6 +74,7 @@ public class ProductConverter {
         productDto.setProductName(product.getProductName());
         productDto.setPrice(product.getPrice());
         productDto.setDescription(product.getDescription());
+        productDto.setCategoryName(product.getCategory().getCategoryName());
         productDto.setQuantity(product.getQuantity());
         productDto.setClassification(product.getClassification());
         productDto.setStatus(product.getStatus());

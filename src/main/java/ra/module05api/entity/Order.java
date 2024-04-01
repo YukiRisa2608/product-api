@@ -1,6 +1,7 @@
 package ra.module05api.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,13 +24,14 @@ public class Order {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
 
     private Double money;
 
     private String address;
 
-    // Default chuwa thanh toan: false
+    // Default chua thanh toan: false
     // da thanh toan: true
     private boolean status;
 

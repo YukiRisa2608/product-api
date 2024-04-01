@@ -22,6 +22,8 @@ public class ProductDto {
     @Size(min = 3)
     private String productName;
 
+    private String categoryName;
+
     @DecimalMin(value = "0.01")
     private Double price;
 

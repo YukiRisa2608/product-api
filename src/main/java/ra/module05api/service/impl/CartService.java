@@ -141,7 +141,7 @@ public class CartService implements ICartService {
         for (ProductCart productCart: listProductCart) {
             Product product = productCart.getProduct();
             if (product.getQuantity() < productCart.getQuantity()) {
-                throw new InvalidException("Quantity khong du");
+                throw new InvalidException("Out of stock");
             }
             // Update quantity to DB
             product.setQuantity(product.getQuantity() - productCart.getQuantity());
